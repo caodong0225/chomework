@@ -1,0 +1,5 @@
+flask
+numpy
+matplotlib
+jieba
+tensorflow~=2.9.3
