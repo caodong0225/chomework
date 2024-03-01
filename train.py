@@ -5,6 +5,7 @@ from keras.layers import Dense, Embedding, LSTM, Dropout, Bidirectional
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np
+
 data = []
 data_all = []
 dataset_in = []
@@ -12,7 +13,7 @@ dataset_out = []
 
 # 读取训练数据
 with open("text.txt", encoding="utf-8") as fr:
-    for i in fr.readlines()[:5000]:  # 读取一部分数据训练（不要全读，带不动！）
+    for i in fr.readlines()[:4000]:  # 读取一部分数据训练（不要全读，带不动！）
         data.append(list(jieba.cut(i.strip("\n"))))
 
 # 加载分词器
@@ -49,8 +50,21 @@ history = model.fit(dataset_in, dataset_out, batch_size=64, epochs=50, verbose=2
 model.save("test.h5")
 with open('test.pickle', 'wb') as handle:
     pickle.dump(tokenizer_str, handle, protocol=pickle.HIGHEST_PROTOCOL)
-plt.plot(history.history['loss'])
-plt.title('Model loss')
-plt.ylabel('loss')
+# 绘制训练 & 验证的损失值
+plt.figure()
+plt.subplot(1, 2, 1)
+plt.plot(history.history['accuracy'])
+# plt.plot(history.history['val_accuracy'])
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
+plt.legend(['Train'], loc='upper left')
+# 绘制训练 & 验证的损失值
+plt.subplot(1, 2, 2)
+plt.plot(history.history['loss'])
+# plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train'], loc='upper left')
 plt.show()
